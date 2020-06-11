@@ -1,34 +1,45 @@
 <template>
   <div class="container">
-    <h2 class="card-title text-center text-primary">
-      Wery Talk App
-    </h2>
-    <h5 class="text-secondary text-center">
-      <span>Pałered by Vue & Firebase, a co!</span>
-    </h5>
-    <div class="card login">
-      <div class="card-body">
-        <h5 class="card-title text-center">
-          Who You w ogóle are, co?
+    <div class="columns is-centered">
+      <div class="column is-half">
+        <h2 class="title is-2">
+          wmChat
+        </h2>
+        <h5 class="subtitle is-5">
+          <span>Pałered by Vue & Firebase, a co!</span>
         </h5>
-        <form class="text-center" @submit.prevent="login">
-          <div class="form-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Twój nick"
-              v-model="name"
-            />
-            <p v-if="errorText" class="text-danger">{{ errorText }}</p>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-half">
+        <form aclass="text-center" @submit.prevent="login">
+          <label for="" class="label">Who You w ogóle are, co?</label>
+          <div class="field is-grouped">
+            <div class="control is-expanded">
+              <input
+                type="text"
+                class="input"
+                placeholder="Twój nick"
+                v-model="name"
+              />
+              <p v-if="errorText" class="help is-danger">{{ errorText }}</p>
+            </div>
+            <div class="control">
+              <button
+                class="button"
+                :disabled="name === '' || errorText !== null"
+                :class="
+                  name !== '' && errorText === null
+                    ? 'is-success'
+                    : 'is-warning'
+                "
+                type="submit"
+              >
+                {{ name === '' || errorText !== null ? ':(' : ':)' }}
+              </button>
+            </div>
           </div>
-          <button
-            :disabled="name === ''"
-            class="btn"
-            :class="name !== '' ? 'btn-success' : 'btn-warning'"
-            type="submit"
-          >
-            {{ name === '' ? ':(' : 'k`cem czata! :)'.bold() }}
-          </button>
         </form>
       </div>
     </div>
@@ -43,6 +54,14 @@ export default {
       name: '',
       errorText: null
     };
+  },
+  watch: {
+    name: function(val) {
+      this.errorText = null;
+      if (val.length < 4 && val !== '') this.errorText = 'Co taki krótki?';
+      else if (val.length > 33)
+        this.errorText = 'No teraz to się przechwalasz...';
+    }
   },
   methods: {
     login() {

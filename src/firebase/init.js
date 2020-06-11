@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import app from 'firebase/app';
 import firestore from 'firebase/firestore';
 
 // Your web app's Firebase configuration
@@ -13,8 +13,8 @@ const firebaseConfig = {
   measurementId: 'G-WEHNTYPDE7'
 };
 // Initialize Firebase
-const fbApp = firebase.initializeApp(firebaseConfig);
+const fbApp = app.initializeApp(firebaseConfig);
 fbApp.firestore();
 
-
+export const fStore = firestore;
 export default fbApp.firestore();
