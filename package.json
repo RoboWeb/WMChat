@@ -1,0 +1,55 @@
+{
+  "name": "wm_chat",
+  "description": "Chat created with VUE, and Firebase. Stored data on Firebase - Cloud Firestore",
+  "version": "0.1.0-alpha",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RoboWeb/wmChat.git",
+    "ssh": "git@github.com:RoboWeb/wmChat.git"
+  },
+  "keywords": [
+    "chat",
+    "vue",
+    "firabase",
+    "firesotre",
+    "phpbb",
+    "forum",
+    "weryfikatorium"
+  ],
+  "author": "Tomasz Wolny",
+  "license": "GNU",
+  "bugs": {
+    "url": "https://github.com/RoboWeb/wmChat/issues"
+  },
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "bootstrap": "^4.5.0",
+    "core-js": "^3.6.5",
+    "firebase": "^7.15.0",
+    "moment": "^2.26.0",
+    "uiv": "^0.35.1",
+    "vue": "^2.6.11",
+    "vue-chat-scroll": "^1.4.0",
+    "vue-router": "^3.2.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.4.0",
+    "@vue/cli-plugin-eslint": "~4.4.0",
+    "@vue/cli-plugin-router": "~4.4.0",
+    "@vue/cli-service": "~4.4.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-vue": "^6.2.2",
+    "prettier": "^1.19.1",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "vue-template-compiler": "^2.6.11"
+  }
+}
