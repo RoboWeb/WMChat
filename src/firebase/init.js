@@ -4,7 +4,7 @@ import firestore from 'firebase/firestore';
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: '[api-key]',
-  authDomain: 'wmapps-81e45.firebaseapp.com',
+  authDomain: '[project-id].firebaseapp.com',
   databaseURL: 'https://[project-id].firebaseio.com',
   projectId: '[project-id]',
   storageBucket: '[project-id].appspot.com',
