@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 // Google Fonts: Header - Roboto Slab, Regular - Roboto, Mono - Roboto Mono
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&family=Roboto+Slab&family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&family=Roboto+Slab&display=swap');
 
 // Set your brand colors
 $purple: #8a4d76;
@@ -11,11 +11,8 @@ $beige-light: #d0d1cd;
 $beige-lighter: #eff0eb;
 
 // Update Bulma's global variables
-$family-sans-serif: 'Roboto', Helvetica, sans-serif;
+$family-sans-serif: 'Roboto Slab', Helvetica, sans-serif;
 $family-monospace: 'Roboto Mono', monospace;
-$family-serif: 'Roboto Slab', serif;
-$family-primary: $family-serif;
-$family-secondary: $family-sans-serif;
 $grey-dark: $brown;
 $grey-light: $beige-light;
 $primary: $purple;

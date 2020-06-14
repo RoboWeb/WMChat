@@ -1,16 +1,17 @@
+import envs from '../app.conf';
 import app from 'firebase/app';
 import firestore from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: '[api-key]',
-  authDomain: '[project-id].firebaseapp.com',
-  databaseURL: 'https://[project-id].firebaseio.com',
-  projectId: '[project-id]',
-  storageBucket: '[project-id].appspot.com',
-  messagingSenderId: '566980532191',
-  appId: '[app-id]',
-  measurementId: 'G-WEHNTYPDE7'
+  apiKey: envs.fb.apiKey,
+  authDomain: envs.fb.authDomain,
+  databaseURL: envs.fb.databaseURL,
+  projectId: envs.fb.projectId,
+  storageBucket: envs.fb.storageBucket,
+  messagingSenderId: envs.fb.messagingSenderId,
+  appId: envs.fb.appId,
+  measurementId: envs.fb.measurementId
 };
 // Initialize Firebase
 const fbApp = app.initializeApp(firebaseConfig);

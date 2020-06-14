@@ -26,18 +26,35 @@
           :id="message.id"
           :author="message.name"
           :time="message.timestamp"
+          :class="{ 'is-main': isMaine(message.name) }"
         >
           <template v-slot:avatar>
-            <img src="../assets/logo.png" alt="Logo" />
+            <!-- <img src="../assets/logo.png" alt="Logo" /> -->
           </template>
           {{ message.message }}
           <template v-slot:actions>
-            <reply title="Odpowiedz" :size="18" />
-            <heart title="Uwielbiam" :size="18" />
-            <like title="Podoba mi się" :size="18" />
-            <unlike title="Niepodoba mi się" :size="18" />
-            <pencil title="Popraw" :size="18" />
-            <trash title="Usuń" :size="18" />
+            <reply title="Odpowiedz" :size="18" v-if="!isMaine(message.name)" />
+            <heart title="Uwielbiam" :size="18" v-if="!isMaine(message.name)" />
+            <like
+              title="Podoba mi się"
+              :size="18"
+              v-if="!isMaine(message.name)"
+            />
+            <unlike
+              title="Niepodoba mi się"
+              :size="18"
+              v-if="!isMaine(message.name)"
+            />
+            <pencil
+              title="Popraw"
+              :size="18"
+              v-if="isMaine(message.name) || iAmMod()"
+            />
+            <trash
+              title="Usuń"
+              :size="18"
+              v-if="isMaine(message.name) || iAmMod()"
+            />
           </template>
         </single-message>
       </div>
@@ -89,6 +106,15 @@ export default {
       messages: []
     };
   },
+  methods: {
+    isMaine: function(mName) {
+      console.log({ mName: mName, name: this.name });
+      return mName === this.name;
+    },
+    iAmMod: function() {
+      return this.name === 'P.Yonk';
+    }
+  },
   created() {
     let ref = fb.collection('messages').orderBy('timestamp');
     const dFormat = 'YYYY.MM.DD';
@@ -118,17 +144,8 @@ export default {
 
 <style lang="scss">
 .is-chat {
-  // h2 {
-  //   font-size: 2.6em;
-  //   margin-bottom: 0px;
-  // }
-  // h5 {
-  //   margin-top: 0px;
-  //   margin-bottom: 40px;
-  // }
-  // span {
-  //   font-size: 1.2em;
-  // }
+  margin-top: calc(1.5rem - 0.75rem);
+  border-top: 1px solid rgba(219, 219, 219, 0.5);
   .time {
     display: block;
     font-size: 0.7em;

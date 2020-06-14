@@ -1,3 +1,5 @@
+//require('dotenv').config();
+
 import Vue from 'vue';
 import VueChatScroll from 'vue-chat-scroll/dist/vue-chat-scroll';
 import App from './App.vue';

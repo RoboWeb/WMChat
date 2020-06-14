@@ -12,11 +12,13 @@
       <div class="content">
         <p>
           <a href="#" @click="$emit('reply', author)" v-if="author">
-            <strong>@{{ author }}</strong>
-          </a>
-          &nbsp;&nbsp;<small>{{ time }}</small> <br /><slot></slot>
+            <strong>@{{ author }}</strong> </a
+          >:&nbsp;&nbsp;
+          <slot></slot>
         </p>
         <nav class="level">
+          <small>{{ time }}</small>
+          &nbsp;&nbsp;
           <slot name="actions"></slot>
         </nav>
       </div>
@@ -35,21 +37,24 @@ export default {
 .media-content {
   .level {
     padding-top: 3px;
-    opacity: 0;
-    transition: opacity 0.8s ease-out;
     position: relative;
+    text-align: right;
+
+    small {
+      font-size: 0.6em;
+      float: left;
+    }
 
     .material-design-icon {
       color: blue;
       padding: 3px;
       margin: 0 2px;
-      // &:hover {
-      //   // zoom: 1.1;
-      // }
+      opacity: 0;
+      transition: opacity 0.8s ease-out;
     }
   }
   &:hover {
-    .level {
+    .material-design-icon {
       opacity: 1;
     }
   }
