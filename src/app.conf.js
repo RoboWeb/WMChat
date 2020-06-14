@@ -1,7 +1,3 @@
-require('dotenv').config();
-
-// const myEnv = dotenv.config();
-
 const envs = {
   fb: {
     apiKey: process.env.VUE_APP_FB_API_KEY,
