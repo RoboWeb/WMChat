@@ -1,7 +1,7 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+//require('dotenv').config();
+
 import Vue from 'vue';
 import VueChatScroll from 'vue-chat-scroll/dist/vue-chat-scroll';
-// import * as uiv from 'uiv';
 import App from './App.vue';
 import router from './router';
 
