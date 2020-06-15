@@ -1,5 +1,6 @@
 import envs from '../app.conf';
 import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -13,7 +14,7 @@ const firebaseConfig = {
   measurementId: envs.fb.measurementId
 };
 // Initialize Firebase
-const fbApp = firebase.initializeApp(firebaseConfig);
-fbApp.firestore();
+const fapp = firebase.initializeApp(firebaseConfig);
+// fbApp.firestore();
 
-export default fbApp.firestore();
+export default fapp.firestore();

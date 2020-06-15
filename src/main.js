@@ -7,7 +7,6 @@ import router from './router';
 
 Vue.config.productionTip = false;
 
-// Vue.use(uiv);
 Vue.use(VueChatScroll);
 
 new Vue({

@@ -1,34 +1,54 @@
 <template>
-  <div class="container" style="margin-bottom: 30px">
-    <form @submit.prevent="createMessage">
-      <div class="form-group">
-        <input
-          type="text"
-          name="message"
-          class="form-control"
-          placeholder="No, wpiszże co ..."
-          v-model="newMessage"
-        />
-        <p class="text-danger" v-if="errorText">{{ errorText }}</p>
+  <article class="media">
+    <!-- avatars here -->
+    <div class="media-left">
+      <figure class="image is-32x32">
+        <slot name="avatar"></slot>
+      </figure>
+    </div>
+
+    <div class="media-content">
+      <div class="content">
+        <form @submit.prevent="createMessage">
+          <div class="field">
+            <span class="control">
+              <textarea
+                class="textarea"
+                :class="{ 'is-danger': errorText }"
+                name="message"
+                placeholder="No, wpiszże co..."
+                v-model="newMessage"
+              ></textarea>
+            </span>
+
+            <p class="help is-danger" v-if="errorText">{{ errorText }}</p>
+          </div>
+          <div class="field">
+            <div class="control">
+              <button
+                class="button is-submit-button"
+                :class="{ 'is-primary': newMessage !== null }"
+                type="submit"
+                name="action"
+              >
+                <send text="" :size="18" />
+                Leć ptaszyno...
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
-      <button
-        class="btn"
-        :class="{ 'btn-primary': newMessage !== null }"
-        type="submit"
-        name="action"
-        v-if="newMessage"
-      >
-        Leć ptaszyno...
-      </button>
-    </form>
-  </div>
+    </div>
+  </article>
 </template>
 
 <script>
 import fb from '@/firebase/init';
+import Send from 'vue-material-design-icons/SendOutline.vue';
 export default {
   name: 'CreateMessage',
   props: ['name'],
+  components: { Send },
   data() {
     return {
       newMessage: null,
@@ -57,4 +77,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.is-submit-button {
+  .material-design-icon {
+    padding-top: 0.2em;
+    margin-right: 0.4em;
+  }
+}
+</style>
