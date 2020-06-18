@@ -1,4 +1,4 @@
-const envs = {
+export const envs = {
   fb: {
     apiKey: process.env.VUE_APP_FB_API_KEY,
     authDomain: process.env.VUE_APP_FB_AUTH_DOMAIN,
@@ -11,4 +11,11 @@ const envs = {
   }
 };
 
-export default envs;
+export const VERSION = '0.1.3-alpha';
+export const NAME = 'wmChat';
+
+export default {
+  envs,
+  VERSION,
+  NAME
+};

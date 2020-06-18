@@ -25,36 +25,67 @@
           :key="message.id"
           :id="message.id"
           :author="message.name"
-          :time="message.timestamp"
+          :timestamp="message.timestamp"
           :class="{ 'is-main': isMaine(message.name) }"
         >
           <template v-slot:avatar>
-            <!-- <img src="../assets/logo.png" alt="Logo" /> -->
+            <img src="../assets/logo.png" alt="Logo" />
           </template>
           {{ message.message }}
           <template v-slot:actions>
-            <reply title="Odpowiedz" :size="18" v-if="!isMaine(message.name)" />
-            <heart title="Uwielbiam" :size="18" v-if="!isMaine(message.name)" />
-            <like
+            <!-- cite -->
+            <button
+              v-if="!isMaine(message.name)"
+              class="button  is-light is-primary is-rounded"
+              title="Odpowiedz"
+            >
+              <reply title="" :size="18" />
+            </button>
+
+            <!-- love -->
+            <button
+              v-if="!isMaine(message.name)"
+              class="button  is-light is-primary is-rounded"
+              title="Uwielbiam"
+            >
+              <heart title="" :size="18" />
+            </button>
+
+            <!-- like -->
+            <button
+              v-if="!isMaine(message.name)"
+              class="button  is-light is-primary is-rounded"
               title="Podoba mi się"
-              :size="18"
+            >
+              <like title="" :size="18" />
+            </button>
+
+            <!-- unlike -->
+            <button
               v-if="!isMaine(message.name)"
-            />
-            <unlike
+              class="button  is-light is-primary is-rounded"
               title="Niepodoba mi się"
-              :size="18"
-              v-if="!isMaine(message.name)"
-            />
-            <pencil
+            >
+              <unlike title="" :size="18" />
+            </button>
+
+            <!-- edit -->
+            <button
+              v-if="isMaine(message.name) || iAmMod()"
+              class="button  is-light is-primary is-rounded"
               title="Popraw"
-              :size="18"
+            >
+              <pencil title="" :size="18" />
+            </button>
+
+            <!-- remove -->
+            <button
               v-if="isMaine(message.name) || iAmMod()"
-            />
-            <trash
+              class="button  is-light is-danger is-rounded"
               title="Usuń"
-              :size="18"
-              v-if="isMaine(message.name) || iAmMod()"
-            />
+            >
+              <trash title="" :size="18" />
+            </button>
           </template>
         </single-message>
       </div>
@@ -66,21 +97,18 @@
 
     <div class="columns is-centered">
       <div class="column is-10 is-form-block">
-        <div class="card">
-          <div class="card-action">
-            <CreateMessage :name="name" />
-          </div>
-        </div>
+        <CreateMessage :name="name" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { NAME, VERSION } from '@/app.conf';
 import SingleMessage from '@/components/SingleMessage';
 import CreateMessage from '@/components/CreateMessage';
 import fb from '@/firebase/init';
-import moment from 'moment/dist/moment.js';
+
 import Trash from 'vue-material-design-icons/TrashCanOutline.vue';
 import Pencil from 'vue-material-design-icons/PencilOutline.vue';
 import Reply from 'vue-material-design-icons/CommentQuoteOutline';
@@ -103,38 +131,87 @@ export default {
   },
   data() {
     return {
-      messages: []
+      messages: [],
+
+      hidden: false,
+      docTitle: NAME + ' - ' + VERSION,
+      scrollTitle: {
+        interval: 1000,
+        timer: null,
+        title: this.docTitle,
+        titleElements: []
+      }
     };
   },
+  watch: {
+    hidden: function(params) {
+      if (!params) {
+        this.scrollTitle.title = this.docTitle;
+        this.scrollTitle.titleElements = [];
+        clearInterval(this.scrollTitle.timer);
+      }
+    },
+    'scrollTitle.title': function(nVal) {
+      document.title = nVal;
+    }
+  },
   methods: {
+    scrollTheTitle: function(newMessageAuthor) {
+      clearInterval(this.scrollTitle.timer);
+      this.scrollTitle.titleElements = [
+        'Nowa',
+        'wiadomość',
+        `od @${newMessageAuthor}!`,
+        `${this.docTitle} | `
+      ];
+      this.scrollTitle.title = this.scrollTitle.titleElements.join(' ');
+      this.scrollTitle.timer = setInterval(
+        this.computeScrolledTitle,
+        this.scrollTitle.interval
+      );
+    },
+    computeScrolledTitle: function() {
+      let shifted = this.scrollTitle.titleElements.shift();
+      this.scrollTitle.titleElements.push(shifted);
+      this.scrollTitle.title = this.scrollTitle.titleElements.join(' ');
+    },
     isMaine: function(mName) {
-      console.log({ mName: mName, name: this.name });
       return mName === this.name;
     },
     iAmMod: function() {
-      return this.name === 'P.Yonk';
-    }
+      return ['P.Yonk', 'Robo', 'Ithi', 'Foux', 'Faraon'].includes(this.name);
+    },
+    removeMessage: function() {}
+  },
+  beforeDestroy() {
+    clearInterval(this.scrollTitle.timer);
   },
   created() {
     let ref = fb.collection('messages').orderBy('timestamp');
-    const dFormat = 'YYYY.MM.DD';
-    const tFormat = 'HH:mm:ss';
+    this.docTitle = document.title;
+
+    window.addEventListener('blur', () => {
+      this.hidden = true;
+    });
+    window.addEventListener('focus', () => {
+      this.hidden = false;
+    });
 
     ref.onSnapshot(snapshot => {
-      console.log({ snapshotSize: snapshot.size });
       snapshot.docChanges().forEach(change => {
-        console.log('SnapshotWasChanged', change.type);
         if (change.type === 'added') {
           let doc = change.doc;
-          let mDate = moment(doc.data().timestamp).format(dFormat);
-          let mTime = moment(doc.data().timestamp).format(tFormat);
 
           this.messages.push({
             id: doc.id,
             name: doc.data().name,
             message: doc.data().message,
-            timestamp: `${mDate}  ${mTime}`
+            timestamp: doc.data().timestamp
           });
+
+          if (this.hidden) {
+            this.scrollTheTitle(doc.data().name);
+          }
         }
       });
     });
@@ -146,16 +223,17 @@ export default {
 .is-chat {
   margin-top: calc(1.5rem - 0.75rem);
   border-top: 1px solid rgba(219, 219, 219, 0.5);
-  .time {
-    display: block;
-    font-size: 0.7em;
-  }
 
   .is-messages-block {
     max-height: 60vh;
     overflow: auto;
+    .media-left {
+      padding-top: 0.2rem;
+    }
     .media {
       margin-top: 0;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
     }
     .ismaine {
       .name {

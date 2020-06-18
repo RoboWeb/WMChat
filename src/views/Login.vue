@@ -58,7 +58,7 @@ export default {
   watch: {
     name: function(val) {
       this.errorText = null;
-      if (val.length < 4 && val !== '') this.errorText = 'Co taki krótki?';
+      if (val.length < 3 && val !== '') this.errorText = 'Co taki krótki?';
       else if (val.length > 33)
         this.errorText = 'No teraz to się przechwalasz...';
     }
