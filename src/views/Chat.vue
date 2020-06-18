@@ -136,9 +136,10 @@ export default {
       hidden: false,
       docTitle: NAME + ' - ' + VERSION,
       scrollTitle: {
-        interval: 250,
+        interval: 1000,
         timer: null,
-        title: this.docTitle
+        title: this.docTitle,
+        titleElements: []
       }
     };
   },
@@ -146,6 +147,7 @@ export default {
     hidden: function(params) {
       if (!params) {
         this.scrollTitle.title = this.docTitle;
+        this.scrollTitle.titleElements = [];
         clearInterval(this.scrollTitle.timer);
       }
     },
@@ -156,15 +158,22 @@ export default {
   methods: {
     scrollTheTitle: function(newMessageAuthor) {
       clearInterval(this.scrollTitle.timer);
-      this.scrollTitle.title = `Nowa wiadomość od @${newMessageAuthor}! | ${this.docTitle} – `;
+      this.scrollTitle.titleElements = [
+        'Nowa',
+        'wiadomość',
+        `od @${newMessageAuthor}!`,
+        `${this.docTitle} | `
+      ];
+      this.scrollTitle.title = this.scrollTitle.titleElements.join(' ');
       this.scrollTitle.timer = setInterval(
         this.computeScrolledTitle,
         this.scrollTitle.interval
       );
     },
     computeScrolledTitle: function() {
-      this.scrollTitle.title =
-        this.scrollTitle.title.substr(1) + this.scrollTitle.title.substr(0, 1);
+      let shifted = this.scrollTitle.titleElements.shift();
+      this.scrollTitle.titleElements.push(shifted);
+      this.scrollTitle.title = this.scrollTitle.titleElements.join(' ');
     },
     isMaine: function(mName) {
       return mName === this.name;
