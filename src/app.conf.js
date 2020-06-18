@@ -11,7 +11,7 @@ export const envs = {
   }
 };
 
-export const VERSION = '0.1.4-alpha';
+export const VERSION = '0.1.5-alpha';
 export const NAME = 'wmChat';
 
 export default {

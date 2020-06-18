@@ -1,19 +1,8 @@
 <template>
   <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-half">
-        <h2 class="title is-2">
-          wmChat
-        </h2>
-        <h5 class="subtitle is-5">
-          <span>Pałered by Vue & Firebase, a co!</span>
-        </h5>
-      </div>
-    </div>
-
     <div class="columns is-centered is-chat">
       <div
-        class="column is-10 is-messages-block"
+        class="column is-12 is-messages-block"
         v-chat-scroll="{ always: false, smooth: true }"
       >
         <single-message v-if="messages.length === 0">
@@ -31,7 +20,7 @@
           <template v-slot:avatar>
             <img src="../assets/logo.png" alt="Logo" />
           </template>
-          {{ message.message }}
+          <span v-html="message.message"></span>
           <template v-slot:actions>
             <!-- cite -->
             <button
@@ -89,15 +78,15 @@
           </template>
         </single-message>
       </div>
-
-      <div class="column is-users-list-block" v-if="false">
-        users
-      </div>
     </div>
 
     <div class="columns is-centered">
-      <div class="column is-10 is-form-block">
-        <CreateMessage :name="name" />
+      <div class="column is-12 is-form-block">
+        <CreateMessage :name="name">
+          <template v-slot:avatar>
+            <img src="../assets/logo.png" alt="Logo" />
+          </template>
+        </CreateMessage>
       </div>
     </div>
   </div>

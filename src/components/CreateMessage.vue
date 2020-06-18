@@ -9,34 +9,37 @@
 
     <div class="media-content">
       <div class="content">
-        <form @submit.prevent="createMessage">
-          <div class="field">
-            <span class="control">
-              <textarea
-                class="textarea"
-                :class="{ 'is-danger': errorText }"
-                name="message"
-                placeholder="No, wpiszże co..."
-                v-model="newMessage"
-              ></textarea>
-            </span>
+        <!-- <form @submit.prevent="createMessage"> -->
+        <div class="field">
+          <span class="control">
+            <textarea
+              @keyup.enter.exact="e => submitByEnter && createMessage(e)"
+              class="textarea"
+              :class="{ 'is-danger': errorText }"
+              name="message"
+              placeholder="No, wpiszże co..."
+              v-model="newMessage"
+              :rows="rows"
+            ></textarea>
+          </span>
 
-            <p class="help is-danger" v-if="errorText">{{ errorText }}</p>
+          <p class="help is-danger" v-if="errorText">{{ errorText }}</p>
+        </div>
+        <div class="field">
+          <div class="control has-text-right">
+            <button
+              class="button is-submit-button"
+              :class="{ 'is-primary': newMessage !== null }"
+              type="submit"
+              name="action"
+              @click="createMessage"
+            >
+              <send text="" :size="18" />
+              Leć ptaszyno...
+            </button>
           </div>
-          <div class="field">
-            <div class="control">
-              <button
-                class="button is-submit-button"
-                :class="{ 'is-primary': newMessage !== null }"
-                type="submit"
-                name="action"
-              >
-                <send text="" :size="18" />
-                Leć ptaszyno...
-              </button>
-            </div>
-          </div>
-        </form>
+        </div>
+        <!-- </form> -->
       </div>
     </div>
   </article>
@@ -51,13 +54,23 @@ export default {
   components: { Send },
   data() {
     return {
+      rows: 1,
       newMessage: null,
-      errorText: null
+      errorText: null,
+      submitByEnter: true
     };
   },
   methods: {
+    pureMessage() {
+      this.newMessage = this.$sanitize(this.newMessage).replace(
+        /\n/g,
+        '<br />'
+      );
+    },
     createMessage() {
       if (this.newMessage) {
+        this.pureMessage();
+        console.log(this.newMessage);
         fb.collection('messages')
           .add({
             message: this.newMessage,

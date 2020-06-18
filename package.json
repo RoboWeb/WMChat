@@ -1,7 +1,7 @@
 {
   "name": "wm_chat",
   "description": "Chat created with VUE, and Firebase. Stored data on Firebase - Cloud Firestore",
-  "version": "0.1.4-alpha",
+  "version": "0.1.5-alpha",
   "private": true,
   "repository": {
     "type": "git",
@@ -36,7 +36,8 @@
     "vue": "^2.6.11",
     "vue-chat-scroll": "^1.4.0",
     "vue-material-design-icons": "^4.7.1",
-    "vue-router": "^3.2.0"
+    "vue-router": "^3.2.0",
+    "vue-sanitize": "^0.2.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",

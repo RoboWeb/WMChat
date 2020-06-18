@@ -2,17 +2,6 @@
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-half">
-        <h2 class="title is-2">
-          wmChat
-        </h2>
-        <h5 class="subtitle is-5">
-          <span>Pałered by Vue & Firebase, a co!</span>
-        </h5>
-      </div>
-    </div>
-
-    <div class="columns is-centered">
-      <div class="column is-half">
         <form aclass="text-center" @submit.prevent="login">
           <label for="" class="label">Who You w ogóle are, co?</label>
           <div class="field is-grouped">
@@ -51,8 +40,8 @@ export default {
   name: 'loginForm',
   data() {
     return {
-      name: '',
-      errorText: null
+      errorText: null,
+      name: ''
     };
   },
   watch: {
