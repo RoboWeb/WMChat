@@ -1,4 +1,4 @@
-import envs from '../app.conf';
+import { envs } from '../app.conf';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 

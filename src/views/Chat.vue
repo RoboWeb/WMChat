@@ -104,6 +104,7 @@
 </template>
 
 <script>
+import { NAME, VERSION } from '@/app.conf';
 import SingleMessage from '@/components/SingleMessage';
 import CreateMessage from '@/components/CreateMessage';
 import fb from '@/firebase/init';
@@ -130,10 +131,41 @@ export default {
   },
   data() {
     return {
-      messages: []
+      messages: [],
+
+      hidden: false,
+      docTitle: NAME + ' - ' + VERSION,
+      scrollTitle: {
+        interval: 250,
+        timer: null,
+        title: this.docTitle
+      }
     };
   },
+  watch: {
+    hidden: function(params) {
+      if (!params) {
+        this.scrollTitle.title = this.docTitle;
+        clearInterval(this.scrollTitle.timer);
+      }
+    },
+    'scrollTitle.title': function(nVal) {
+      document.title = nVal;
+    }
+  },
   methods: {
+    scrollTheTitle: function(newMessageAuthor) {
+      clearInterval(this.scrollTitle.timer);
+      this.scrollTitle.title = `Nowa wiadomość od @${newMessageAuthor}! | ${this.docTitle} – `;
+      this.scrollTitle.timer = setInterval(
+        this.computeScrolledTitle,
+        this.scrollTitle.interval
+      );
+    },
+    computeScrolledTitle: function() {
+      this.scrollTitle.title =
+        this.scrollTitle.title.substr(1) + this.scrollTitle.title.substr(0, 1);
+    },
     isMaine: function(mName) {
       return mName === this.name;
     },
@@ -142,8 +174,19 @@ export default {
     },
     removeMessage: function() {}
   },
+  beforeDestroy() {
+    clearInterval(this.scrollTitle.timer);
+  },
   created() {
     let ref = fb.collection('messages').orderBy('timestamp');
+    this.docTitle = document.title;
+
+    window.addEventListener('blur', () => {
+      this.hidden = true;
+    });
+    window.addEventListener('focus', () => {
+      this.hidden = false;
+    });
 
     ref.onSnapshot(snapshot => {
       snapshot.docChanges().forEach(change => {
@@ -156,6 +199,10 @@ export default {
             message: doc.data().message,
             timestamp: doc.data().timestamp
           });
+
+          if (this.hidden) {
+            this.scrollTheTitle(doc.data().name);
+          }
         }
       });
     });
@@ -167,10 +214,6 @@ export default {
 .is-chat {
   margin-top: calc(1.5rem - 0.75rem);
   border-top: 1px solid rgba(219, 219, 219, 0.5);
-  // .time {
-  //   display: block;
-  //   font-size: 0.8rem;
-  // }
 
   .is-messages-block {
     max-height: 60vh;
