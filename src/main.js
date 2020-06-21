@@ -5,13 +5,20 @@ import VueSanitize from 'vue-sanitize';
 import VueChatScroll from 'vue-chat-scroll/dist/vue-chat-scroll';
 import App from './App.vue';
 import router from './router';
-import { NAME, VERSION } from '@/app.conf';
+
+import {
+  NAME,
+  VERSION,
+  ALLOWED_HTML_TAGS,
+  ALLOWED_HTML_ATTRIBUTES
+} from '@/app.conf';
+
 /**
  * Sanitizing
  */
 const opt = {
-  allowedTags: ['i', 'em', 'b', 'strong'],
-  allowedAttributes: {}
+  allowedTags: ALLOWED_HTML_TAGS,
+  allowedAttributes: ALLOWED_HTML_ATTRIBUTES
 };
 Vue.use(VueSanitize, opt);
 
@@ -24,4 +31,4 @@ document.title = NAME + ' - ' + VERSION;
 new Vue({
   router,
   render: h => h(App)
-}).$mount('#app');
+}).$mount('#wmchat');

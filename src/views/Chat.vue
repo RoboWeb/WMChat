@@ -1,92 +1,131 @@
 <template>
-  <div class="container">
-    <div class="columns is-centered is-chat">
-      <div
-        class="column is-12 is-messages-block"
-        v-chat-scroll="{ always: false, smooth: true }"
-      >
-        <single-message v-if="messages.length === 0">
-          Na razie nikt nie godo... :(
-        </single-message>
+  <div class="forabg">
+    <div class="inner">
+      <ul class="topiclist">
+        <li class="header">
+          <dl class="row-item">
+            <dt>
+              <h4 class="list-inner">
+                <router-link :to="{ name: 'Chat' }">
+                  {{ appName }}
+                </router-link>
+              </h4>
+            </dt>
+            <dd class="lastpost">
+              <span class="version">
+                <small>v.{{ appVersion }}</small>
+              </span>
+            </dd>
+          </dl>
+        </li>
+      </ul>
 
-        <single-message
-          v-for="message in messages"
-          :key="message.id"
-          :id="message.id"
-          :author="message.name"
-          :timestamp="message.timestamp"
-          :class="{ 'is-main': isMaine(message.name) }"
-        >
-          <template v-slot:avatar>
-            <img src="../assets/logo.png" alt="Logo" />
-          </template>
-          <span v-html="message.message"></span>
-          <template v-slot:actions>
-            <!-- cite -->
-            <button
-              v-if="!isMaine(message.name)"
-              class="button  is-light is-primary is-rounded"
-              title="Odpowiedz"
+      <div id="wmChat" class="postbody is-chat">
+        <div class="is-messages-block">
+          <!-- if some static -->
+          <ul class="topiclist forums is-static" v-if="hasStatic">
+            <li
+              class="row"
+              v-if="messages.length"
+              title="Na razie nikt nie godo... :("
             >
-              <reply title="" :size="18" />
-            </button>
+              <figure class="row-item is-media">
+                <img src="../assets/logo.png" alt="Logo" class="is-chat-logo" />
+              </figure>
 
-            <!-- love -->
-            <button
-              v-if="!isMaine(message.name)"
-              class="button  is-light is-primary is-rounded"
-              title="Uwielbiam"
+              <p>Na razie nikt nie godo... :(</p>
+            </li>
+          </ul>
+
+          <!-- messages -->
+          <ul
+            class="topiclist forums is-messages"
+            v-chat-scroll="{ always: false, smooth: true }"
+          >
+            <message
+              :is_main="isMaine(message.name)"
+              v-for="message in messages"
+              :key="message.id"
+              :itemId="'message-' + message.id"
+              :author="message.name"
+              :timestamp="message.timestamp"
             >
-              <heart title="" :size="18" />
-            </button>
+              <template #avatar>
+                <img src="../assets/logo.png" alt="Logo" class="is-chat-logo" />
+              </template>
+              <div v-html="message.message"></div>
+              <template #actions>
+                <!-- mention -->
+                <button
+                  v-if="!isMaine(message.name)"
+                  class="button  is-light is-primary is-rounded"
+                  title="Zawołaj rozmówcę"
+                >
+                  <icon name="mention" />
+                </button>
 
-            <!-- like -->
-            <button
-              v-if="!isMaine(message.name)"
-              class="button  is-light is-primary is-rounded"
-              title="Podoba mi się"
-            >
-              <like title="" :size="18" />
-            </button>
+                <!-- cite -->
+                <button
+                  v-if="!isMaine(message.name)"
+                  class="button  is-light is-primary is-rounded"
+                  title="Odpowiedz"
+                >
+                  <icon name="quote" />
+                </button>
 
-            <!-- unlike -->
-            <button
-              v-if="!isMaine(message.name)"
-              class="button  is-light is-primary is-rounded"
-              title="Niepodoba mi się"
-            >
-              <unlike title="" :size="18" />
-            </button>
+                <!-- like -->
+                <button
+                  v-if="!isMaine(message.name)"
+                  class="button  is-light is-primary is-rounded"
+                  title="Podoba mi się"
+                >
+                  <icon name="like" />
+                </button>
 
-            <!-- edit -->
-            <button
-              v-if="isMaine(message.name) || iAmMod()"
-              class="button  is-light is-primary is-rounded"
-              title="Popraw"
-            >
-              <pencil title="" :size="18" />
-            </button>
+                <!-- unlike -->
+                <button
+                  v-if="!isMaine(message.name)"
+                  class="button  is-light is-primary is-rounded"
+                  title="Niepodoba mi się"
+                >
+                  <icon name="unlike" />
+                </button>
 
-            <!-- remove -->
-            <button
-              v-if="isMaine(message.name) || iAmMod()"
-              class="button  is-light is-danger is-rounded"
-              title="Usuń"
-            >
-              <trash title="" :size="18" />
-            </button>
-          </template>
-        </single-message>
-      </div>
-    </div>
+                <!-- edit -->
+                <button
+                  v-if="isMaine(message.name) || iAmMod()"
+                  class="button  is-light is-primary is-rounded"
+                  title="Popraw"
+                >
+                  <icon name="edit" />
+                </button>
 
-    <div class="columns is-centered">
-      <div class="column is-12 is-form-block">
-        <CreateMessage :name="name">
-          <template v-slot:avatar>
-            <img src="../assets/logo.png" alt="Logo" />
-          </template>
-        </CreateMessage>
+                <!-- remove -->
+                <button
+                  v-if="isMaine(message.name) || iAmMod()"
+                  class="button  is-light is-danger is-rounded"
+                  title="Usuń"
+                >
+                  <icon name="trash" />
+                </button>
+
+                <!-- reveal -->
+                <!-- <button class="button is-transparent" title="Akcje">
+                  <icon name="dots" />
+                </button> -->
+              </template>
+            </message>
+          </ul>
+        </div>
+        <!-- editor -->
+        <div class="is-editor-block">
+          <figure class="row-item is-media">
+            <img src="../assets/logo.png" alt="Logo" class="is-chat-logo" />
+          </figure>
+          <CreateMessage :name="name">
+            <template v-slot:avatar> </template>
+          </CreateMessage>
+        </div>
       </div>
     </div>
   </div>
@@ -94,32 +133,24 @@
 
 <script>
 import { NAME, VERSION } from '@/app.conf';
-import SingleMessage from '@/components/SingleMessage';
+import Message from '@/components/Message';
 import CreateMessage from '@/components/CreateMessage';
 import fb from '@/firebase/init';
-
-import Trash from 'vue-material-design-icons/TrashCanOutline.vue';
-import Pencil from 'vue-material-design-icons/PencilOutline.vue';
-import Reply from 'vue-material-design-icons/CommentQuoteOutline';
-import Heart from 'vue-material-design-icons/HeartOutline';
-import Unlike from 'vue-material-design-icons/ThumbDownOutline';
-import Like from 'vue-material-design-icons/ThumbUpOutline';
+import Icon from '@/components/Icon';
 
 export default {
   name: 'Chat',
   props: ['name'],
   components: {
     CreateMessage,
-    SingleMessage,
-    Trash,
-    Pencil,
-    Reply,
-    Heart,
-    Like,
-    Unlike
+    Message,
+    Icon
   },
   data() {
     return {
+      appName: NAME,
+      appVersion: VERSION,
+      hasStatic: false,
       messages: [],
 
       hidden: false,
@@ -209,28 +240,142 @@ export default {
 </script>
 
 <style lang="scss">
+.lastpost {
+  .version {
+    float: right;
+  }
+}
 .is-chat {
-  margin-top: calc(1.5rem - 0.75rem);
-  border-top: 1px solid rgba(219, 219, 219, 0.5);
+  width: 100%;
+  color: inherit;
+  // general
+  .is-message {
+    strong {
+      font-weight: bold;
+    }
+  }
 
+  // message elements
+  .is-media {
+    float: left;
+    width: 40px;
+    padding: 0 0.5rem 0 0;
+    margin: 0;
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  .is-message-meta {
+    p {
+      margin: 0;
+    }
+    .is-author {
+      transition: all 0.5s ease-out;
+      opacity: 1;
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+  }
+  .is-content {
+    font-size: 1.2em;
+    padding-top: 3px;
+  }
+
+  // messages block
   .is-messages-block {
-    max-height: 60vh;
-    overflow: auto;
-    .media-left {
-      padding-top: 0.2rem;
-    }
-    .media {
-      margin-top: 0;
-      padding-top: 0.5rem;
-      padding-bottom: 0.5rem;
-    }
-    .ismaine {
-      .name {
-        color: #131a22 !important;
+    position: relative;
+    border-bottom: 1px solid;
+    border-bottom-color: #e7e7e7;
+
+    .topiclist.forums {
+      &.is-static {
+        font-size: 1.1rem;
+        .row {
+          p {
+            padding-top: 1rem;
+          }
+          .is-media {
+            margin-right: 2rem;
+          }
+        }
       }
-      .message {
-        color: #131a22;
+      &.is-messages {
+        max-height: 60vh;
+        min-height: 300px;
+        overflow: auto;
+        width: 100%;
       }
+
+      .row {
+        &.is-message-wrapper {
+          display: block;
+          position: relative;
+          padding: 5px;
+
+          .is-actions-wrapper {
+            transition: opacity 200ms ease-in;
+            position: absolute;
+            right: 0;
+            top: 0;
+            opacity: 0;
+
+            .button {
+              border-radius: 0;
+              border-right: 0;
+              &:first-child {
+                border-top-left-radius: 4px;
+                border-bottom-left-radius: 4px;
+              }
+              &:last-child {
+                border-right: 1px solid #c6c6c6;
+                border-top-right-radius: 4px;
+                border-bottom-right-radius: 4px;
+              }
+
+              &.is-transparent {
+                background: transparent;
+                border: 0;
+                border-radius: 50%;
+                &:hover {
+                  color: inherit;
+                  background: rgba(185, 51, 41, 0.5);
+                }
+              }
+            }
+          }
+
+          &:hover {
+            .is-actions-wrapper {
+              opacity: 1;
+            }
+          }
+        }
+
+        &.is-main {
+          background: rgba(0, 0, 0, 0.1);
+          background: linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0.05) 0%,
+            rgba(0, 0, 0, 0) 100%
+          );
+          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=1 );
+        }
+      }
+    }
+  }
+
+  // editor block
+  .is-editor-block {
+    padding: 10px 5px 5px;
+    border-top: 1px solid transparent;
+    border-top-color: white;
+    text-align: center;
+
+    .is-media {
+      float: left;
     }
   }
 }

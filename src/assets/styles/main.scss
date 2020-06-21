@@ -1,20 +1,14 @@
 @charset "utf-8";
 
-// Google Fonts: Header - Roboto Slab, Regular - Roboto, Mono - Roboto Mono
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&family=Roboto+Slab&display=swap');
+// from Theme
+@import './themes/elegance.scss';
+// @import './themes/elegance.softblue.scss';
+// @import './themes/latte.scss';
 
-// Theme default
-@import './themes/default/variables.scss';
+// common
+@import url('https://phpbb33.roboweb.nstrefa.pl/assets/cookieconsent/cookieconsent.min.css?assets_version=7');
+@import url('https://phpbb33.roboweb.nstrefa.pl/ext/alfredoramos/markdown/styles/all/theme/css/common.css?assets_version=7');
+@import url('https://phpbb33.roboweb.nstrefa.pl/ext/alfredoramos/markdown/styles/prosilver/theme/css/markdown.css?assets_version=7');
+@import url('https://phpbb33.roboweb.nstrefa.pl/ext/phpbb/pages/styles/prosilver/theme/pages_common.css?assets_version=7');
 
-@import 'bulma/sass/utilities/_all.sass';
-@import 'bulma/sass/base/_all';
-@import 'bulma/sass/grid/columns.sass';
-@import 'bulma/sass/form/_all.sass';
-@import 'bulma/sass/elements/title.sass';
-@import 'bulma/sass/elements/container.sass';
-@import 'bulma/sass/elements/button.sass';
-@import 'bulma/sass/elements/image.sass';
-@import 'bulma/sass/components/media.sass';
-@import 'bulma/sass/components/modal.sass';
-@import 'bulma/sass/layout/section.sass';
-@import 'bulma/sass/helpers/typography.sass';
+// wmChat

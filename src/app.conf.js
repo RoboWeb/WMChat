@@ -11,8 +11,10 @@ export const envs = {
   }
 };
 
-export const VERSION = '0.1.5-alpha';
+export const VERSION = '0.2.0-alpha';
 export const NAME = 'wmChat';
+export const ALLOWED_HTML_TAGS = ['strong', 'em'];
+export const ALLOWED_HTML_ATTRIBUTES = {};
 
 export default {
   envs,

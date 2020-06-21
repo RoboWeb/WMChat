@@ -1,31 +1,40 @@
 <template>
-  <article class="media">
-    <!-- avatars here -->
-    <div class="media-left">
-      <figure class="image is-32x32">
-        <slot name="avatar"></slot>
-      </figure>
-    </div>
-
-    <!-- name + date + main content + standard actions -->
-    <div class="media-content">
-      <div class="content">
-        <p class="is-time" :data-timestamp="timestamp">
-          <small>{{ time }}</small>
-        </p>
+  <li
+    class="row is-message-wrapper"
+    :data-author="author"
+    :data-timestamp="timestamp"
+    :class="is_mine"
+    :id="itemId"
+  >
+    <figure class="row-item is-media">
+      <slot name="avatar">
+        <img src="../assets/logo.png" alt="Logo" class="is-chat-logo" />
+      </slot>
+    </figure>
+    <div class="is-message">
+      <div class="is-message-meta">
         <p>
-          <a href="#" @click="$emit('call', author)" v-if="author">
+          <a
+            href="#"
+            @click="$emit('call', author)"
+            class="is-author"
+            v-if="author"
+          >
             <strong>@{{ author }}</strong> </a
-          >:&nbsp;&nbsp;
-          <slot></slot>
+          >,&nbsp;&nbsp;
+          <span class="is-time">
+            <small>{{ time }}</small>
+          </span>
         </p>
-        <nav class="level buttons has-addons is-right">
-          &nbsp;&nbsp;
-          <slot name="actions"></slot>
-        </nav>
+      </div>
+      <div class="is-content">
+        <slot></slot>
       </div>
     </div>
-  </article>
+    <div class="is-actions-wrapper">
+      <slot name="actions"></slot>
+    </div>
+  </li>
 </template>
 
 <script>
@@ -35,7 +44,7 @@ moment.locale('pl');
 
 export default {
   name: 'SingleMessage',
-  props: ['author', 'timestamp'],
+  props: ['author', 'timestamp', 'is_mine', 'itemId'],
   data() {
     return {
       time: 'Chwilę temu',
@@ -94,44 +103,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.media-content {
-  .content {
-    position: relative;
-
-    .is-time {
-      line-height: 1;
-      font-size: 0.8em;
-      padding-bottom: 0.2rem;
-    }
-
-    .level {
-      padding-top: 3px;
-      position: absolute;
-      text-align: right;
-      display: block;
-      top: -0.2rem;
-      right: 3px;
-      opacity: 0;
-      transition: opacity 0.4s ease-out;
-
-      .button {
-        font-size: 0.7rem;
-        padding: calc(0.5em - 2px);
-
-        .material-design-icon {
-          margin: 0 2px;
-        }
-      }
-    }
-  }
-
-  &:hover {
-    .content {
-      .level {
-        opacity: 1;
-      }
-    }
-  }
-}
-</style>
+<style lang="scss"></style>
