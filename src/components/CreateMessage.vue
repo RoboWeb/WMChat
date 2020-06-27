@@ -37,6 +37,7 @@
 
 <script>
 import fb from '@/firebase/init';
+import { evbus } from '@/main';
 
 export default {
   name: 'CreateMessage',
@@ -57,9 +58,8 @@ export default {
       );
     },
     createMessage() {
+      this.pureMessage();
       if (this.newMessage) {
-        this.pureMessage();
-
         fb.collection('messages')
           .add({
             message: this.newMessage,
@@ -75,6 +75,15 @@ export default {
         this.errorText = 'No ale wpiszże co najsampierf, taa?';
       }
     }
+  },
+  created() {
+    evbus.$on('mentionhim', data => {
+      let style = data.color ? ` style="color: ${data.color};"` : '';
+      let decorCaller = `<strong${style}>@${data.callerName}</strong>`;
+      this.newMessage = this.newMessage
+        ? this.newMessage + ' ' + decorCaller
+        : decorCaller;
+    });
   }
 };
 </script>

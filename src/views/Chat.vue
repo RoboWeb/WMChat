@@ -43,12 +43,13 @@
             v-chat-scroll="{ always: false, smooth: true }"
           >
             <message
-              :is_main="isMaine(message.name)"
+              :isMain="isMine(message.name)"
               v-for="message in messages"
               :key="message.id"
               :itemId="'message-' + message.id"
               :author="message.name"
               :timestamp="message.timestamp"
+              :isMod="isMod(message.name)"
             >
               <template #avatar>
                 <img src="../assets/logo.png" alt="Logo" class="is-chat-logo" />
@@ -57,17 +58,18 @@
               <template #actions>
                 <!-- mention -->
                 <button
-                  v-if="!isMaine(message.name)"
-                  class="button  is-light is-primary is-rounded"
+                  v-if="!isMine(message.name)"
+                  class="button"
                   title="Zawołaj rozmówcę"
+                  @click="mentionCaller(message.name)"
                 >
                   <icon name="mention" />
                 </button>
 
                 <!-- cite -->
                 <button
-                  v-if="!isMaine(message.name)"
-                  class="button  is-light is-primary is-rounded"
+                  v-if="!isMine(message.name)"
+                  class="button"
                   title="Odpowiedz"
                 >
                   <icon name="quote" />
@@ -75,8 +77,8 @@
 
                 <!-- like -->
                 <button
-                  v-if="!isMaine(message.name)"
-                  class="button  is-light is-primary is-rounded"
+                  v-if="!isMine(message.name)"
+                  class="button"
                   title="Podoba mi się"
                 >
                   <icon name="like" />
@@ -84,8 +86,8 @@
 
                 <!-- unlike -->
                 <button
-                  v-if="!isMaine(message.name)"
-                  class="button  is-light is-primary is-rounded"
+                  v-if="!isMine(message.name)"
+                  class="button"
                   title="Niepodoba mi się"
                 >
                   <icon name="unlike" />
@@ -93,8 +95,8 @@
 
                 <!-- edit -->
                 <button
-                  v-if="isMaine(message.name) || iAmMod()"
-                  class="button  is-light is-primary is-rounded"
+                  v-if="isMine(message.name) || iAmMod()"
+                  class="button"
                   title="Popraw"
                 >
                   <icon name="edit" />
@@ -102,8 +104,8 @@
 
                 <!-- remove -->
                 <button
-                  v-if="isMaine(message.name) || iAmMod()"
-                  class="button  is-light is-danger is-rounded"
+                  v-if="isMine(message.name) || iAmMod()"
+                  class="button"
                   title="Usuń"
                 >
                   <icon name="trash" />
@@ -133,9 +135,10 @@
 
 <script>
 import { NAME, VERSION } from '@/app.conf';
+import { evbus } from '@/main';
 import Message from '@/components/Message';
 import CreateMessage from '@/components/CreateMessage';
-import fb from '@/firebase/init';
+// import fb from '@/firebase/init';
 import Icon from '@/components/Icon';
 
 export default {
@@ -152,7 +155,6 @@ export default {
       appVersion: VERSION,
       hasStatic: false,
       messages: [],
-
       hidden: false,
       docTitle: NAME + ' - ' + VERSION,
       scrollTitle: {
@@ -195,11 +197,22 @@ export default {
       this.scrollTitle.titleElements.push(shifted);
       this.scrollTitle.title = this.scrollTitle.titleElements.join(' ');
     },
-    isMaine: function(mName) {
+    isMine: function(mName) {
       return mName === this.name;
     },
+    isMod: function(userName) {
+      return ['P.Yonk', 'Robo', 'Ithi', 'Foux', 'Faraon'].includes(userName)
+        ? '#AA0000'
+        : false;
+    },
     iAmMod: function() {
-      return ['P.Yonk', 'Robo', 'Ithi', 'Foux', 'Faraon'].includes(this.name);
+      return this.isMod(this.name);
+    },
+    mentionCaller(callerName) {
+      evbus.$emit('mentionhim', {
+        callerName: callerName,
+        color: this.isMod(callerName)
+      });
     },
     removeMessage: function() {}
   },

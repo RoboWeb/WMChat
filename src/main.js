@@ -28,6 +28,8 @@ Vue.use(VueChatScroll);
 
 document.title = NAME + ' - ' + VERSION;
 
+export const evbus = new Vue();
+
 new Vue({
   router,
   render: h => h(App)

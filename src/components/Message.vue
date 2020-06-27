@@ -3,7 +3,7 @@
     class="row is-message-wrapper"
     :data-author="author"
     :data-timestamp="timestamp"
-    :class="is_mine"
+    :class="isMine"
     :id="itemId"
   >
     <figure class="row-item is-media">
@@ -20,7 +20,9 @@
             class="is-author"
             v-if="author"
           >
-            <strong>@{{ author }}</strong> </a
+            <strong :style="{ color: isMod ? isMod : 'inherit' }"
+              >@{{ author }}</strong
+            > </a
           >,&nbsp;&nbsp;
           <span class="is-time">
             <small>{{ time }}</small>
@@ -44,7 +46,7 @@ moment.locale('pl');
 
 export default {
   name: 'SingleMessage',
-  props: ['author', 'timestamp', 'is_mine', 'itemId'],
+  props: ['author', 'timestamp', 'isMine', 'itemId', 'isMod'],
   data() {
     return {
       time: 'Chwilę temu',
@@ -96,7 +98,6 @@ export default {
     clearInterval(this.timer);
   },
   created: function() {
-    // moment.locale('pl');
     this.displayTime();
     this.timer = setInterval(this.displayTime, this.currentInterval * 1000);
   }
